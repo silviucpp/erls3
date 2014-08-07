@@ -1,7 +1,7 @@
 {application, erls3, [
 	{description, ""},
 	{vsn, "0.1.0"},
-	{modules, ['erls3util', 'erls3sup', 'erls3', 'console_events', 'erls3server']},
+	{modules, []},
 	{registered, []},
 	{applications, [
 		kernel,

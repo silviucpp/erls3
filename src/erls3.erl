@@ -21,7 +21,6 @@
 	 ]).
 %% API
 
--compile(export_all).
 -export([
     read_term/2, write_term/3,
 	  list_buckets/0, create_bucket/1, 
@@ -37,7 +36,8 @@
 	  get_versioning/1,
 	  copy/4,
 	  is_empty_bucket/1,
-	  purge_bucket/1 ]).
+	  purge_bucket/1,
+    notify/1]).
 
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
@@ -56,6 +56,7 @@ start()->
 start(_Type, _StartArgs) ->
     ID = get(access, "AMAZON_ACCESS_KEY_ID"),
     Secret = get(secret, "AMAZON_SECRET_ACCESS_KEY"),
+    Region = get(region, "AMAZON_REGION"),
     MaxSessions = param(max_sessions, 100),
     MaxPipeline = param(max_pipeline_size, 20),
     SSL = param(ssl, false),
@@ -73,7 +74,7 @@ start(_Type, _StartArgs) ->
     if ID == error orelse Secret == error ->
             {error, "AWS credentials not set. Pass as application parameters or as env variables."};
         true ->
-            R = erls3sup:start_link([ID, Secret, SSL, Timeout], N),
+            R = erls3sup:start_link([ID, Secret, Region, SSL, Timeout], N),
             case EventHandler of
               none -> ok;
               _H -> gen_event:add_handler(erls3_events, EventHandler, [])
