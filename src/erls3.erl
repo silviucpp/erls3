@@ -69,8 +69,8 @@ start(_Type, _StartArgs) ->
             443;
         true -> 80
     end,
-    ibrowse:set_max_sessions("s3.amazonaws.com", Port,MaxSessions),
-    ibrowse:set_max_pipeline_size("s3.amazonaws.com", Port, MaxPipeline),
+    ibrowse:set_max_sessions("s3-" ++ Region ++ ".amazonaws.com", Port,MaxSessions),
+    ibrowse:set_max_pipeline_size("s3-" ++ Region ++ ".amazonaws.com", Port, MaxPipeline),
     if ID == error orelse Secret == error ->
             {error, "AWS credentials not set. Pass as application parameters or as env variables."};
         true ->
