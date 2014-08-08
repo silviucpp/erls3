@@ -384,7 +384,11 @@ genericRequest(From, #state{ssl=SSL, access_key=AKI, secret_key=SAK, region=Regi
                    {reply, {ok, H, Callback(B, H)}, State};
                 {ok, Code, _H, _B} ->
                    {reply, {error, return_code, Code}, State};
-                {error,E} when E =:= retry_later orelse E =:= conn_failed ->
+                {error, retry_later} ->
+                    {reply, retry, State};
+                {error, conn_failed} ->
+                    {reply, retry, State};
+                {error, {send_failed, {error,closed}}} ->
                     {reply, retry, State};
                 {error, E} ->
                     {reply, {error, E, "Error Occured"}, State}
