@@ -390,6 +390,8 @@ genericRequest(From, #state{ssl=SSL, access_key=AKI, secret_key=SAK, region=Regi
                     {reply, retry, State};
                 {error, {send_failed, {error,closed}}} ->
                     {reply, retry, State};
+                {error, req_timedout} ->
+                    {reply, retry, State};
                 {error, E} ->
                     {reply, {error, E, "Error Occured"}, State}
             end
