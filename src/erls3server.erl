@@ -230,7 +230,7 @@ handle_info({ibrowse_async_response_end,RequestId}, State = #state{pending=P})->
 		none -> {noreply,State}
 			%% the requestid isn't here, probably the request was deleted after a timeout
 	end;
-handle_info({ibrowse_async_response,RequestId,{error,Error}}, State = #state{pending=P}) ->
+handle_info({ibrowse_async_response,RequestId,{error,_Error}}, State = #state{pending=P}) ->
     case gb_trees:lookup(RequestId,P) of
 		{value,#request{pid=Pid}} ->
 		    gen_server:reply(Pid, retry),
