@@ -381,7 +381,7 @@ genericRequest(From, #state{ssl=SSL, access_key=AKI, secret_key=SAK, region=Regi
         {error, R} ->
             {reply, {error, R, "Error Occured"}, State};
         Fd ->
-            case ibrowse:send_req(Url, Headers,  Method, Contents,Options, Timeout) of
+            case ibrowse:send_req(lists:flatten(Url), Headers,  Method, Contents,Options, Timeout) of
                 {ibrowse_req_id,RequestId} ->
                     Pendings = gb_trees:insert(RequestId,#request{pid=From, to_file=Fd, opts=Params, started=now(),  callback=Callback},P),
                     {noreply, State#state{pending=Pendings}};
