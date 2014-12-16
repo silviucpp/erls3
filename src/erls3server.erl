@@ -315,16 +315,16 @@ queryParams( L ) ->
     "?" ++ erls3util:string_join( lists:sort(lists:map( Stringify, L )), "&" ).
 
 buildUrl(Region,Bucket,Path,QueryParams, false) ->
-    io_lib:format("http://~s~s~s", [ erls3util:region_url(Region)
-                                   , canonicalizedResource(Bucket,Path)
-                                   , queryParams(QueryParams)
-                                   ]);
+    ?FORMAT("http://~s~s~s", [ erls3util:region_url(Region)
+                             , canonicalizedResource(Bucket,Path)
+                             , queryParams(QueryParams)
+                             ]);
 
 buildUrl(Region,Bucket,Path,QueryParams, true) ->
-    io_lib:format("https://~s~s~s", [ erls3util:region_url(Region)
-                                    , canonicalizedResource(Bucket,Path)
-                                    , queryParams(QueryParams)
-                                    ]).
+    ?FORMAT("https://~s~s~s", [ erls3util:region_url(Region)
+                              , canonicalizedResource(Bucket,Path)
+                              , queryParams(QueryParams)
+                              ]).
 
 buildContentHeaders( <<>>, _ContentType, AdditionalHeaders ) -> AdditionalHeaders;
 buildContentHeaders( {_F, read} = C, ContentType, AdditionalHeaders ) ->
