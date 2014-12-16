@@ -12,7 +12,7 @@
 -include_lib("xmerl/include/xmerl.hrl").
 
 region_url("us-east-1") -> "s3.amazonaws.com";
-region_url(R) -> io_lib:format("s3-~s.amazonaws.com", [R]).
+region_url(R) -> ?FORMAT("s3-~s.amazonaws.com", [R]).
     
 %% Collapse equal keys into one list
 consume ({K,V}, [{K,L}|T]) -> [{K,[V|L]}|T];
