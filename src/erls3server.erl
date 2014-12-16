@@ -181,11 +181,12 @@ handle_cast(_Msg, State) ->
 %% Description: Handling all non call/cast messages
 %%--------------------------------------------------------------------
 handle_info({ibrowse_async_headers,RequestId,Code,Headers },State = #state{pending=P}) ->
-        ?DEBUG("******* Headers :  ~w ~p~n", [Code, Headers]),
+        ?DEBUG("******* Headers :  ~w ~p~n", [lists:flatten(Code), Headers]),
 	case gb_trees:lookup(RequestId,P) of
 		{value,#request{pid = Pid }=R} ->
 		    {ICode, []} = string:to_integer(Code),
 		    if ICode >= 500 ->
+                        ?DEBUG("******* About to retry... ~w ~n", [lists:flatten(Code)]),
 		        gen_server:reply(Pid,retry),
 		        {noreply,State#state{pending=gb_trees:delete(RequestId, P)}};
 		    true ->
@@ -230,7 +231,8 @@ handle_info({ibrowse_async_response_end,RequestId}, State = #state{pending=P})->
 		none -> {noreply,State}
 			%% the requestid isn't here, probably the request was deleted after a timeout
 	end;
-handle_info({ibrowse_async_response,RequestId,{error,_Error}}, State = #state{pending=P}) ->
+handle_info({ibrowse_async_response,RequestId,{error,Error}}, State = #state{pending=P}) ->
+    ?DEBUG("******* Headers : ~p~n", [Error]),
     case gb_trees:lookup(RequestId,P) of
 		{value,#request{pid=Pid}} ->
 		    gen_server:reply(Pid, retry),
