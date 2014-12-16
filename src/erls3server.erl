@@ -181,7 +181,7 @@ handle_cast(_Msg, State) ->
 %% Description: Handling all non call/cast messages
 %%--------------------------------------------------------------------
 handle_info({ibrowse_async_headers,RequestId,Code,Headers },State = #state{pending=P}) ->
-    %?DEBUG("******* Response :  ~p~n", [Response]),
+    ?DEBUG("******* Response :  ~p~n", [Response]),
 	case gb_trees:lookup(RequestId,P) of
 		{value,#request{pid = Pid }=R} ->
 		    {ICode, []} = string:to_integer(Code),
@@ -390,20 +390,20 @@ genericRequest(From, #state{ssl=SSL, access_key=AKI, secret_key=SAK, region=Regi
                 {ok, Code, _H, _B} ->
                    {reply, {error, return_code, Code}, State};
                 {error, retry_later} ->
-                    io:format("Failure: retry_later\n"),
-                    {reply, retry, State};
+                    {reply, {error, "retry_later", "Error Occured"}, State};
+                    %%{reply, retry, State};
                 {error, conn_failed} ->
-                    io:format("Failure: conn_failed\n"),
-                    {reply, retry, State};
+                    {reply, {error, "conn_failed", "Error Occured"}, State};
+                    %%{reply, retry, State};
                 {error, {conn_failed, _}} ->
-                    io:format("Failure: conn_failed for reason\n"),
-                    {reply, retry, State};
+                    {reply, {error, "conn_failed more", "Error Occured"}, State};
+                    %%{reply, retry, State};
                 {error, {send_failed, _}} ->
-                    io:format("Failure: send_failed\n"),
-                    {reply, retry, State};
+                    {reply, {error, "send_failed", "Error Occured"}, State};
+                    %%{reply, retry, State};
                 {error, req_timedout} ->
-                    io:format("Failure: req_timedout\n"),
-                    {reply, retry, State};
+                    {reply, {error, "req_timedout", "Error Occured"}, State};
+                    %%{reply, retry, State};
                 {error, E} ->
                     {reply, {error, E, "Error Occured"}, State}
             end
