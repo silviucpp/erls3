@@ -181,7 +181,7 @@ handle_cast(_Msg, State) ->
 %% Description: Handling all non call/cast messages
 %%--------------------------------------------------------------------
 handle_info({ibrowse_async_headers,RequestId,Code,Headers },State = #state{pending=P}) ->
-    ?DEBUG("******* Response :  ~p~n", [Response]),
+        ?DEBUG("******* Headers :  ~p~n", [Headers]),
 	case gb_trees:lookup(RequestId,P) of
 		{value,#request{pid = Pid }=R} ->
 		    {ICode, []} = string:to_integer(Code),
