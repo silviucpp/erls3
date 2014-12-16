@@ -390,14 +390,19 @@ genericRequest(From, #state{ssl=SSL, access_key=AKI, secret_key=SAK, region=Regi
                 {ok, Code, _H, _B} ->
                    {reply, {error, return_code, Code}, State};
                 {error, retry_later} ->
+                    io:format("Failure: retry_later\n"),
                     {reply, retry, State};
                 {error, conn_failed} ->
+                    io:format("Failure: conn_failed\n"),
                     {reply, retry, State};
                 {error, {conn_failed, _}} ->
+                    io:format("Failure: conn_failed for reason\n"),
                     {reply, retry, State};
                 {error, {send_failed, _}} ->
+                    io:format("Failure: send_failed\n"),
                     {reply, retry, State};
                 {error, req_timedout} ->
+                    io:format("Failure: req_timedout\n"),
                     {reply, retry, State};
                 {error, E} ->
                     {reply, {error, E, "Error Occured"}, State}
