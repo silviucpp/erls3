@@ -54,4 +54,4 @@ get_pids() ->
 
 get_random_pid() ->
     Pids = get_pids(),
-    lists:nth(erlang:phash(now(), length(Pids)), Pids).
+    lists:nth(erlang:phash(erlang:timestamp(), length(Pids)), Pids).
