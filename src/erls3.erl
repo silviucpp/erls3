@@ -62,7 +62,7 @@ start(_Type, _StartArgs) ->
     SSL = param(ssl, false),
     N = param(workers, 20),
     EventHandler = param(event_handler, none),
-    random:seed(),
+    rand:seed(exsplus),
     Timeout = param(timeout, ?TIMEOUT),
     Port = if SSL == true -> 
             ssl:start(),
@@ -258,11 +258,11 @@ call(M, Retries)->
     Pid = erls3sup:get_random_pid(),
     case gen_server:call(Pid, M, infinity) of
       retry -> 
-          Sleep = random:uniform(trunc(math:pow(4, Retries)*100)),
+          Sleep = rand:uniform(trunc(math:pow(4, Retries)*100)),
           timer:sleep(Sleep),
           call(M, Retries + 1);   
      {timeout, _} ->
-          Sleep = random:uniform(trunc(math:pow(4, Retries)*100)),
+          Sleep = rand:uniform(trunc(math:pow(4, Retries)*100)),
           timer:sleep(Sleep),
           call(M, Retries + 1);
       R -> R
